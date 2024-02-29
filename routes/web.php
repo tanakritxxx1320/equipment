@@ -30,6 +30,9 @@ Route::get('aboutyou', function(){
 Route::get('edit', function(){
     return view('edit');
 })->name('edit');
+Route::get('addeq', function(){
+    return view('addeq');
+})->name('addeq');
 
 Route::fallback(function(){
     return "<h1>ไม่พบหน้าเว็บ</h1>";

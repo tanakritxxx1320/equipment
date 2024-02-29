@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\type;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -26,6 +27,12 @@ return new class extends Migration
             $table->string('eq_ref');
             $table->string('eq_pic');
             $table->string('eq_note');
+            $table->string('eq_organization');
+            $table->string('eq_receive_method');
+            $table->string('agent_name');
+            $table->unsignedBigInteger('type_id');
+            $table->foreign('type_id')->on('types')->references('id');
+            
 
 
             $table->timestamps();
