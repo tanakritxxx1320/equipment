@@ -70,6 +70,37 @@
                                         name="password_confirmation" required autocomplete="new-password">
                                 </div>
                             </div>
+                            <div class="row mb-3">
+                                <label for="Tel" class="col-md-4 col-form-label text-md-end">{{ __('Tel') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="name" type="text"
+                                        class="form-control @error('Tel') is-invalid @enderror" name="Tel"
+                                        value="{{ old('Tel') }}" required autocomplete="Tel" autofocus>
+
+                                    @error('Tel')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="Affiliation" class="col-md-4 col-form-label text-md-end">{{ __('Affiliation') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="Affiliation" type="text"
+                                        class="form-control @error('Affiliation') is-invalid @enderror" name="Affiliation"
+                                        value="{{ old('Affiliation') }}" required autocomplete="Affiliation" autofocus>
+
+                                    @error('Affiliation')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
 
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-4">
