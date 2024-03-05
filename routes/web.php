@@ -31,9 +31,7 @@ Route::get('aboutyou', function(){
 Route::get('edit', function(){
     return view('edit');
 })->name('edit');
-Route::get('admin',function(){
-    return view('admin');
-});
+Route::get('admin', [Admincontroller::class, 'index']);
 
 Route::fallback(function(){
     return "<h1>ไม่พบหน้าเว็บ</h1>";

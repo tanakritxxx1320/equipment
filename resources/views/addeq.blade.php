@@ -1,8 +1,10 @@
-@extends('layout')
-@section('title','เพิ่มครุภัณฑ์')
+@extends('layouts.app')
+{{-- @section('title','เพิ่มครุภัณฑ์') --}}
 @section('content')
     <h2 class="text text-center py-2">เพิ่มครุภัณฑ์</h2>
-    <form>
+    <form class=" m-5 p-2 bg-white" method="POST" action="{{ route('admin.store') }}">
+
+        @csrf
         <div class="form-group">
             <label for="eq_name">ชื่อครุภัณฑ์</label>
             <input type="text" name="eq_name" class="form-control">
@@ -38,14 +40,12 @@
             <input type="text" name="eq_ref" class="form-control">
 
             <label for="eq_pic">รูปภาพ</label>
-            <input type="text" name="eq_pic" class="form-control">
-
+            <input type="file"  name="eq_pic" class="form-control" >
             <label for="eq_note">หมายเหตุ</label>
             <input type="text" name="eq_note" class="form-control">
 
 
-            <label for="eq_expire">วันหมดประกัน</label>
-            <input type="date" name="eq_expire" class="form-control">
+       
             
             <label for="eq_organization">หน่วยงานผู้ใช้</label>
             <input type="text" name="eq_organization" class="form-control">
@@ -60,12 +60,19 @@
             <input type="text" name="type_id" class="form-control">
             
             
-            
-            
-            
-            
-       
-       
-       
         </div>
+     {{-- <button type="submit" value="บันทึก" class="btn btn-primary my-3">บันทึก</button> --}}
+     {{-- <a href="{{route('addeq')}}" class="btn btn-succes">ข้อมูลครุภัณฑ์ทั้งหมด</a> --}}
+     <button type="submit" class="btn btn-primary my-3">บันทึก</button>
+
+     @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
     </form>
+    @endsection

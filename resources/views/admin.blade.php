@@ -1,8 +1,58 @@
-@extends('layout')
-@section('title','เพิ่มครุภัณฑ์')
+@extends('layouts.app')
+{{-- @section('title','เพิ่มครุภัณฑ์') --}}
 @section('content')
-    <h2 class="text text-center py-2">เพิ่มครุภัณฑ์</h2>
-    <form method="POST" action="{{ route('admin.store') }}">
+    <h2 class="text text-center py-2">ครุภัณฑ์</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Equipment Name</th>
+                <th>Equipment Code</th>
+                <th>Status</th>
+                <th>Serial Number</th>
+                <th>Date Received</th>
+                <th>Fund</th>
+                <th>Price</th>
+                <th>Amount</th>
+                <th>Expiration Date</th>
+                <th>Place</th>
+                <th>Reference</th>
+                <th>Picture</th>
+                <th>Note</th>
+                <th>Organization</th>
+                <th>Code</th>
+                <th>Receive Method</th>
+                <th>Agent Name</th>
+                <th>Type ID</th>
+                <!-- เพิ่มคอลัมน์ต่างๆที่คุณต้องการแสดง -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($equipments as $equipment)
+                <tr>
+                    <td>{{ $equipment->eq_name }}</td>
+                    <td>{{ $equipment->eq_code }}</td>
+                    <td>{{ $equipment->eq_status }}</td>
+                    <td>{{ $equipment->eq_sn }}</td>
+                    <td>{{ $equipment->date_receive }}</td>
+                    <td>{{ $equipment->eq_fund }}</td>
+                    <td>{{ $equipment->eq_price }}</td>
+                    <td>{{ $equipment->eq_amount }}</td>
+                    <td>{{ $equipment->eq_expire }}</td>
+                    <td>{{ $equipment->eq_place }}</td>
+                    <td>{{ $equipment->eq_ref }}</td>
+                    <td>{{ $equipment->eq_pic }}</td>
+                    <td>{{ $equipment->eq_note }}</td>
+                    <td>{{ $equipment->eq_organization }}</td>
+                    <td>{{ $equipment->eq_code }}</td>
+                    <td>{{ $equipment->eq_receive_method }}</td>
+                    <td>{{ $equipment->agent_name }}</td>
+                    <td>{{ $equipment->type_id }}</td>
+                    <!-- เพิ่มคอลัมน์ต่างๆที่คุณต้องการแสดง -->
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+    {{-- <form class=" m-5 p-2 rounded bg-white" method="POST" action="{{ route('admin.store') }}">
 
         @csrf
         <div class="form-group">
@@ -40,8 +90,7 @@
             <input type="text" name="eq_ref" class="form-control">
 
             <label for="eq_pic">รูปภาพ</label>
-            <input type="text" name="eq_pic" class="form-control">
-
+            <input type="file"  name="eq_pic" class="form-control" >
             <label for="eq_note">หมายเหตุ</label>
             <input type="text" name="eq_note" class="form-control">
 
@@ -62,8 +111,6 @@
             
             
         </div>
-     {{-- <button type="submit" value="บันทึก" class="btn btn-primary my-3">บันทึก</button> --}}
-     {{-- <a href="{{route('addeq')}}" class="btn btn-succes">ข้อมูลครุภัณฑ์ทั้งหมด</a> --}}
      <button type="submit" class="btn btn-primary my-3">บันทึก</button>
 
      @if ($errors->any())
@@ -75,4 +122,5 @@
         </ul>
     </div>
 @endif
-    </form>
+    </form> --}}
+@endsection
