@@ -20,26 +20,29 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/equipdata', function(){
+Route::get('/equipdata', function () {
     return view('equipdata');
 })->name('equipdata');
 
-Route::get('aboutyou', function(){
+Route::get('aboutyou', function () {
     return view('aboutyou');
 })->name('aboutyou');
 
-Route::get('edit', function(){
+Route::get('edit', function () {
     return view('edit');
 })->name('edit');
-Route::get('admin', [Admincontroller::class, 'index']);
 
-Route::fallback(function(){
+Route::fallback(function () {
     return "<h1>ไม่พบหน้าเว็บ</h1>";
 });
 Auth::routes();
 
-Route::post('addeq',[Admincontroller::class,'store'])->name('admin.store');
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('admin', [Admincontroller::class, 'index'])->name('admin.index');
+    Route::get('addeq', fn() => view('addeq'))->name('addeq');
+    Route::post('store', [Admincontroller::class, 'store'])->name('admin.store');
+});
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('auth', fn() => (new User())->isAdmin() ? "TRUE": "FALSE");
+Route::get('auth', fn() => (new User())->isAdmin() ? "TRUE" : "FALSE");
