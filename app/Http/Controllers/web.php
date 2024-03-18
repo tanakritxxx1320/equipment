@@ -34,7 +34,7 @@ Route::get('edit', function () {
 })->name('edit');
 
 Route::fallback(function () {
-    return redirect()->route('login');
+    return "<h1>ไม่พบหน้าเว็บ</h1>";
 });
 Auth::routes();
 
@@ -44,7 +44,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('store', [Admincontroller::class, 'store'])->name('admin.store');
     Route::get('delete',[Admincontroller::class, 'delete'])->name('admin.delete');
     //Route::get('edit/{id}', [Admincontroller::class,'edit'])->name('admin.edit');
-    Route::post('update',[Admincontroller::class,'update'])->name('admin.update');
+    Route::put('update',[Admincontroller::class,'update'])->name('admin.update');
     Route::get('edit{id}', [Admincontroller::class,'edit'])->name('admin.edit');
 
 });

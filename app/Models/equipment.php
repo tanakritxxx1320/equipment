@@ -10,6 +10,7 @@ class equipment extends Model
     use HasFactory;
 
     protected $fillable = [
+                'id',
                 'eq_name',
                 'eq_code',
                 'eq_status',
@@ -27,6 +28,7 @@ class equipment extends Model
                 'eq_code',
                 'eq_receive_method',
                 'agent_name',
-                'type_id'
+                'type_id',
+                'user_id'
     ];
 }

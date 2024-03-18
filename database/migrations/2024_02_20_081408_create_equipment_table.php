@@ -32,8 +32,8 @@ return new class extends Migration
             $table->string('agent_name');
             $table->unsignedBigInteger('type_id');
             $table->foreign('type_id')->on('types')->references('id');
-            
-
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->on('users')->references('id');
 
             $table->timestamps();
         });

@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\equipment;
 use App\Models\type;
+use App\Models\User;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Admincontroller extends Controller
 {
@@ -14,14 +17,93 @@ class Admincontroller extends Controller
         $equipments = equipment::all();  // ดึงข้อมูล equipment ทั้งหมด
         return view('admin', ['equipments' => $equipments]);
     }
+    public function addeq(Request $request)
+    {
+        $id = $request->input('id'); // Retrieve the value of the 'id' parameter from the request
+        $equipment = Equipment::find($id); // Assuming you have an 'Equipment' model
+
+        $users = User::where('type', '=', 0)->pluck('name', 'id')->map(fn ($name, $id) => ['id' => $id, 'name' => $name]);
+
+        $types = type::pluck('type_name', 'id')->map(fn ($name, $id) => ['id' => $id, 'name' => $name]);
+
+        return view('addeq', ['users' => $users, 'equipment' => $equipment, 'types' => $types]);
+    }
+
+
+
 
     public function store(Request $request)
     {
         $requestData = $request->all();
-        $fileName = time().$request->file('eq_pic')->getClientOriginalName();
-        $path = $request->file('eq_pic')->storeAs('eq',$fileName,'public');
-        $requestData['eq_pic'] = '/storage/'.$path;
-        equipment::create($requestData);
-        return redirect()->route('admin.index')->with('message','equipment added!');
+
+        if ($request->hasFile('eq_pic')) {
+            // Process file upload
+            $fileName = time() . '_' . $request->file('eq_pic')->getClientOriginalName();
+            $path = $request->file('eq_pic')->storeAs('eq', $fileName, 'public');
+            $requestData['eq_pic'] = '/storage/' . $path;
+        }
+        Equipment::create($requestData);
+        return redirect()->route('admin.index')->with('message', 'Equipment added successfully!');
+    }
+
+    public function delete(Request $request)
+    {
+        DB::table('equipment')->where('id', $request->id)->delete();
+        return  redirect()->route('admin.index')->with('equipment delete!');
+    }
+
+    // public function edit($id)
+    //{        
+    //  $data=equipment::find($id);
+    //return view('admin.edit', compact('data'));    
+    //}
+
+    // Controller
+    public function edit($id)
+    {
+        $equipment = Equipment::find($id);
+        $types = type::pluck('type_name', 'id')->map(fn ($name, $id) => ['id' => $id, 'name' => $name]);
+        $users = User::where('type', '=', 0)->pluck('name', 'id')->map(fn ($name, $id) => ['id' => $id, 'name' => $name]);
+        return view('edit', ['equipment' => $equipment, 'types' => $types, 'users' => $users]);
+    }
+
+
+    public function update(Request $request)
+    {
+        $requestData = $request->all();
+        if ($request->hasFile('eq_pic')) {
+            $fileName = $request->eq_pic->getClientOriginalName(); // Get the original file name
+            $path = $request->file('eq_pic')->storeAs('eq', $fileName, 'public');
+            $requestData['eq_pic'] = '/storage/' . $path;
+        }
+        $equipment = Equipment::find($request->id);
+        $equipment->eq_name = $request->input('eq_name');
+        $equipment->eq_code = $request->input('eq_code');
+        $equipment->eq_status = $request->input('eq_status');
+        $equipment->eq_sn = $request->input('eq_sn');
+        $equipment->date_receive = $request->input('date_receive');
+        $equipment->eq_fund = $request->input('eq_fund');
+        $equipment->eq_price = $request->input('eq_price');
+        $equipment->eq_amount = $request->input('eq_amount');
+        $equipment->eq_expire = $request->input('eq_expire');
+        $equipment->eq_place = $request->input('eq_place');
+        $equipment->eq_ref = $request->input('eq_ref');
+        $equipment->eq_pic =   $requestData['eq_pic'];
+        $equipment->eq_note = $request->input('eq_note');
+        $equipment->eq_receive_method = $request->input('eq_receive_method');
+        $equipment->agent_name = $request->input('agent_name');
+        $equipment->eq_organization = $request->input('eq_organization');
+
+        $equipment->type_id = $request->input('type_id');
+        $equipment->user_id = $request->input('user_id');
+        // Update other fields as needed
+        $equipment->save();
+
+        return redirect()->route('admin.index')->with('success', 'Equipment updated successfully');
+
+
+        // $equipment = Equipment::find($request->id); 
+        // $equipment->update($requestData);
+        // return redirect()->route('admin.index')->with('message','equipment added!');
     }
 }
