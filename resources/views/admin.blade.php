@@ -52,21 +52,20 @@
                                             </div>
                                             <div class="text-end  d-flex align-items-center">
                                                 <div class="dropdown">
-                                                    <a class="text-muted" href="#" role="button"
-                                                        data-bs-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
+                                                    <a class="" href="#" type="button" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
                                                         <i class="bi bi-three-dots"></i>
                                                     </a>
                                                     <div class="dropdown-menu">
-                                                        <a href="{{ route('admin.edit', ['id' => $equipment->id])}}" class="dropdown-item">แก้ไข</a>
-                                                        <a href="{{route('admin.delete',['id'=> $equipment->id])}}" class="dropdown-item text-danger">ลบ</a>
+                                                        <a href="{{ route('admin.edit', ['eq_code' => (string)$equipment->eq_code]) }}"   class="dropdown-item">แก้ไข</a>
+                                                        <a href="{{ route('admin.delete', ['eq_code' => (string)$equipment->eq_code]) }}" class="dropdown-item text-danger">ลบ</a>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-body text-center">     
-                                        <figure class="mx-auto">
+                                    <div class="card-body text-center">
+                                        <figure class="mx-auto" data-toggle="modal"
+                                            data-target="#{{ $equipment->eq_code }}">
                                             <div class="mx-auto" style="height: 200px; overflow: hidden;">
                                                 <img alt="..." class="rounded img-fluid object-fit-cover"
                                                     src="{{ asset($equipment->eq_pic) }}">
@@ -83,11 +82,47 @@
                                                 <span class="d-block text-sm text-muted">ต่อหน่วย</span>
                                             </div>
                                             <div class="col-6">
-                                                <span
-                                                    class="d-block h6 text-heading mb-0">{{ $equipment->eq_amount }}</span>
+                                                <span class="d-block h6 text-heading mb-0">{{ $equipment->amount }}</span>
                                                 <span class="d-block text-sm text-muted">จำนวน</span>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="{{ $equipment->eq_code }}" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">{{ $equipment->eq_name }}
+                                            </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+
+
+                                            <figure class="mx-auto" data-toggle="modal" data-target="#exampleModalCenter">
+                                                <div class="mx-auto" style="width: 60%; overflow: hidden;">
+                                                    <img alt="..." class="rounded img-fluid object-fit-cover"
+                                                        src="{{ asset($equipment->eq_pic) }}">
+                                                </div>
+                                            </figure>
+
+                                            <div class="flex flex-row">
+                                                <p><span>ชื่อครุภัณฑ์</span> <span>{{ $equipment->eq_name }}</span></p>
+                                                <p><span>ประเภทครุภัณฑ์</span> <span>{{ $equipment->type_name }}</span></p>
+                                                <p><span>ราคา/หน่อย</span> <span>{{ $equipment->eq_price }}</span></p>
+                                            </div>
+
+
+                                        </div>
+                                        {{-- <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -115,6 +150,10 @@
             </div>
         </main>
     </div>
+
+
+
+
     {{--    <div class="container-fluid"> --}}
     {{--        <div class="row"> --}}
     {{--            <div class="col-sm-12"> --}}

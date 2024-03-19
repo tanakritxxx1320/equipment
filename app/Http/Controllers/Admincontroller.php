@@ -5,22 +5,32 @@ namespace App\Http\Controllers;
 use App\Models\equipment;
 use App\Models\type;
 use App\Models\User;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class Admincontroller extends Controller
 {
     public function index()
     {
-        $equipments = equipment::all();  // ดึงข้อมูล equipment ทั้งหมด
+        $equipments = Equipment::select('eq_name', DB::raw('count(*) as amount'))
+        ->groupBy('eq_name')
+        ->get()
+        ->map(function ($item) {
+            $eq = Equipment::where('eq_name', '=', $item->eq_name)
+                ->join('types', 'types.id', '=', 'equipment.type_id') // แก้ไขตรงนี้
+                ->first();
+            $eq->amount = $item->amount;
+            return $eq;
+        });
         return view('admin', ['equipments' => $equipments]);
     }
+    
+    
     public function addeq(Request $request)
     {
-        $id = $request->input('id'); // Retrieve the value of the 'id' parameter from the request
-        $equipment = Equipment::find($id); // Assuming you have an 'Equipment' model
+        $eq_code = $request->input('eq_code'); // Retrieve the value of the 'id' parameter from the request
+        $equipment = Equipment::find($eq_code);
+
 
         $users = User::where('type', '=', 0)->pluck('name', 'id')->map(fn ($name, $id) => ['id' => $id, 'name' => $name]);
 
@@ -48,7 +58,7 @@ class Admincontroller extends Controller
 
     public function delete(Request $request)
     {
-        DB::table('equipment')->where('id', $request->id)->delete();
+        DB::table('equipment')->where('eq_code', $request->eq_code)->delete();
         return  redirect()->route('admin.index')->with('equipment delete!');
     }
 
@@ -59,9 +69,10 @@ class Admincontroller extends Controller
     //}
 
     // Controller
-    public function edit($id)
+    public function edit(string $eq_code)
     {
-        $equipment = Equipment::find($id);
+        // $eq_code = $request->eq_code; // Retrieve the value of the 'id' parameter from the request
+        $equipment = equipment::find($eq_code);
         $types = type::pluck('type_name', 'id')->map(fn ($name, $id) => ['id' => $id, 'name' => $name]);
         $users = User::where('type', '=', 0)->pluck('name', 'id')->map(fn ($name, $id) => ['id' => $id, 'name' => $name]);
         return view('edit', ['equipment' => $equipment, 'types' => $types, 'users' => $users]);
@@ -76,7 +87,7 @@ class Admincontroller extends Controller
             $path = $request->file('eq_pic')->storeAs('eq', $fileName, 'public');
             $requestData['eq_pic'] = '/storage/' . $path;
         }
-        $equipment = Equipment::find($request->id);
+        $equipment = Equipment::find($request->eq_code);
         $equipment->eq_name = $request->input('eq_name');
         $equipment->eq_code = $request->input('eq_code');
         $equipment->eq_status = $request->input('eq_status');

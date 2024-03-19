@@ -45,7 +45,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('delete',[Admincontroller::class, 'delete'])->name('admin.delete');
     //Route::get('edit/{id}', [Admincontroller::class,'edit'])->name('admin.edit');
     Route::post('update',[Admincontroller::class,'update'])->name('admin.update');
-    Route::get('edit{id}', [Admincontroller::class,'edit'])->name('admin.edit');
+    Route::get('edit/{eq_code}', [Admincontroller::class,'edit'])->name('admin.edit');
 
 });
 
